@@ -1,3 +1,29 @@
+async function setupWebcam(videoEl) {
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        const webcamStream = await navigator.mediaDevices.getUserMedia({
+            audio: false,
+            video: {
+                facingMode: 'user', // 'user' or 'environment'
+            },
+        })
+        if ('srcObject' in videoEl) {
+            videoEl.srcObject = webcamStream
+        } else {
+            videoEl.src = window.URL.createObjectURL(webcamStream)
+        }
+        return new Promise((resolve, _) => {
+            videoEl.onloadedmetadata = () => {
+                const imgWidth = videoEl.clientWidth
+                const imgHeight = videoEl.clientHeight
+                resolve([imgHeight, imgWidth])
+            }
+        })
+    } else {
+        alert('Нет вебкамеры - извините!')
+    }
+}
+
+
 let model
 
 async function loadModel(){
