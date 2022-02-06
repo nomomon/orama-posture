@@ -95,7 +95,7 @@ function checkPose(pose) {
 
     // Math.abs converts a negative number to a positive one
     if (Math.abs(rightEye.y - defaultRightEyePosition[0]) > 15) {
-        say("криво сидишь")
+        say("сядь как раньше сидел")
     }
 
     if (Math.abs(rightEye.y - defaultRightEyePosition[0]) < 15) {
