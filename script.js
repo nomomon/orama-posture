@@ -48,6 +48,31 @@ async function getKeyPoints(image, model){
     return pose
 }
 
+function getRusVoice(voices){
+	for(let i in voices){
+		if(voices[i].lang.indexOf("ru") + 1){
+			return voices[i];
+		}
+	}
+	return null;
+}
+
+function say(text, lang="ru"){
+    
+    const voices = speechSynthesis.getVoices();
+    if(voices.length > 0){
+        const tts = new SpeechSynthesisUtterance(text);
+    
+        if(lang == "ru"){
+            tts.lang = "ru-RU";
+        }
+
+        if(!window.speechSynthesis.speaking){
+            return window.speechSynthesis.speak(tts);
+        }
+    }
+}
+
 var rightEye, leftEye, defaultRightEyePosition = [], defaultLeftEyePosition = [];
 
 
@@ -66,11 +91,11 @@ function checkPose(pose) {
 
     // Math.abs converts a negative number to a positive one
     if (Math.abs(rightEye.y - defaultRightEyePosition[0]) > 15) {
-        console.log("криво сидишь")
+        say("криво сидишь")
     }
 
     if (Math.abs(rightEye.y - defaultRightEyePosition[0]) < 15) {
-        console.log("нормально сидишь")
+        say("нормально сидишь")
     }
 }
 
