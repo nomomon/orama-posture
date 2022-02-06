@@ -1,3 +1,7 @@
+function $(querySelector, element = document){
+    return element.querySelector(querySelector);
+}
+
 async function setupWebcam(videoEl) {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         const webcamStream = await navigator.mediaDevices.getUserMedia({
