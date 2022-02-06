@@ -77,35 +77,43 @@ function say(text, lang="ru"){
     }
 }
 
-var rightEye, leftEye, defaultRightEyePosition = [], defaultLeftEyePosition = [];
-
+function gradient(p1, p2){
+    return (p1.y - p2.y) / (p1.x - p2.x);
+}
 
 function checkPose(pose) {
-    rightEye = pose.keypoints[2].position;
-    leftEye = pose.keypoints[1].position;
+    let rightEye = pose.keypoints[2].position;
+    let leftEye = pose.keypoints[1].position;
+    let rightShoulder = pose.keypoints[6].position;
+    let leftShoulder = pose.keypoints[5].position;
+    let rightWrist = pose.keypoints[10].position;
+    let leftWrist = pose.keypoints[9].position;
+    let rightKnee = pose.keypoints[14].position;
+    let leftKnee = pose.keypoints[13].position;
+    let rightAnkle = pose.keypoints[16].position;
+    let leftAnkle = pose.keypoints[15].position;
 
-    // Position of eyes when a human opens experiment page. Start position.
-    while (defaultRightEyePosition.length < 1) {
-        defaultRightEyePosition.push(rightEye.y);
-    }
+    let eyes = Math.abs(gradient(rightEye, leftEye)) < .1
+    let shoulders = Math.abs(gradient(rightShoulder, leftShoulder)) < .1
 
-    while (defaultLeftEyePosition.length < 1) {
-        defaultLeftEyePosition.push(leftEye.y);
-    }
-
-    // Math.abs converts a negative number to a positive one
-    if (Math.abs(rightEye.y - defaultRightEyePosition[0]) > 15) {
-        say("сядь как раньше сидел")
-    }
-
-    if (Math.abs(rightEye.y - defaultRightEyePosition[0]) < 15) {
+    if (eyes && shoulders) {
         say("нормально сидишь")
+    }
+    else if(!eyes && shoulders){
+        say("поправь голову")
+    }
+    else if(eyes && !shoulders){
+        say("поправь плечи")
+    }
+    else if(!eyes && !shoulders){
+        say("сядь как человек")
     }
 }
 
 async function performDetections(model, camera, [imgHeight, imgWidth]){
     const pose = await getKeyPoints(camera, model);
 
+    console.log(pose)
     checkPose(pose);
 }
 
