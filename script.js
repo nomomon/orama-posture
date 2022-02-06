@@ -97,7 +97,15 @@ function checkPose(pose) {
     let shoulders = Math.abs(gradient(rightShoulder, leftShoulder)) < .1
 
     if (eyes && shoulders) {
-        say("нормально сидишь")
+        y1 = (rightEye.y + leftEye.y) / 2
+        y2 = (rightShoulder.y + leftShoulder.y) / 2
+        
+        if(Math.abs(y1 - y2) > 50){
+            say("нормально сидишь")
+        }
+        else{
+            say("подними голову")
+        }
     }
     else if(!eyes && shoulders){
         say("поправь голову")
