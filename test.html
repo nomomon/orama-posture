@@ -8,7 +8,7 @@
 </head>
 <body>
     
-    <button onclick="() => {doStuff(); $('button').parentElement.removeChild($('button'))}">нажми когда готов</button>
+    <button onclick="(() => {doStuff(); $('button').parentElement.removeChild($('button'))})()">нажми когда готов</button>
 
     <video id="camera" autoplay></video>
 
