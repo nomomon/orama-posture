@@ -23,7 +23,12 @@ async function setupWebcam(videoEl) {
                 const imgWidth = videoEl.clientWidth
                 const imgHeight = videoEl.clientHeight
                 
-                resolve([imgHeight, imgWidth])
+                const detection = document.getElementById('detection')
+                const ctx = detection.getContext('2d')
+                detection.width = imgWidth
+                detection.height = imgHeight
+
+                resolve([ctx, imgHeight, imgWidth])
             }
         })
     } else {
@@ -33,7 +38,7 @@ async function setupWebcam(videoEl) {
 
 
 
-function loadModel([height, width]){
+function loadModel([ctx, height, width]){
     const params = {
         architecture: 'MobileNetV1',
         outputStride: 16,
@@ -82,47 +87,86 @@ function gradient(p1, p2){
 }
 
 function checkPose(pose) {
-    let rightEye = pose.keypoints[2].position;
-    let leftEye = pose.keypoints[1].position;
-    let rightShoulder = pose.keypoints[6].position;
-    let leftShoulder = pose.keypoints[5].position;
-    let rightWrist = pose.keypoints[10].position;
-    let leftWrist = pose.keypoints[9].position;
-    let rightKnee = pose.keypoints[14].position;
-    let leftKnee = pose.keypoints[13].position;
-    let rightAnkle = pose.keypoints[16].position;
-    let leftAnkle = pose.keypoints[15].position;
+    let threshold = 0.5;
 
-    let eyes = Math.abs(gradient(rightEye, leftEye)) < .1
-    let shoulders = Math.abs(gradient(rightShoulder, leftShoulder)) < .1
+    let rightEye = pose.keypoints[2], 
+        leftEye = pose.keypoints[1], 
+        rightShoulder = pose.keypoints[6], 
+        leftShoulder = pose.keypoints[5], 
+        rightWrist = pose.keypoints[10], 
+        leftWrist = pose.keypoints[9], 
+        rightKnee = pose.keypoints[14], 
+        leftKnee = pose.keypoints[13], 
+        rightAnkle = pose.keypoints[16], 
+        leftAnkle = pose.keypoints[15];
 
-    if (eyes && shoulders) {
-        y1 = (rightEye.y + leftEye.y) / 2
-        y2 = (rightShoulder.y + leftShoulder.y) / 2
-        
-        if(Math.abs(y1 - y2) > 50){
-            say("нормально сидишь")
+    let eyesGradient = gradient(rightEye.position, leftEye.position),
+        shouldersGradient = gradient(rightShoulder.position, leftShoulder.position);
+
+    let eyesGoodAngle = Math.abs(eyesGradient) < 0.1,
+        shouldersGoodAngle = Math.abs(shouldersGradient) < 0.1;
+    
+    let eyesVisible = rightEye.score > threshold && leftEye.score > threshold,
+        shouldersVisible = rightShoulder.score > threshold && leftShoulder.score > threshold;
+
+    if(!eyesVisible){
+        say("поверните лицо в сторону экрана, ваше лицо не видно");
+    }
+    else if(!shouldersVisible){
+        if(!eyesGoodAngle){
+            say("поверните голову")
         }
-        else{
-            say("подними голову")
+    }
+    else{
+        if(!eyesGoodAngle && shouldersGoodAngle){
+            say("поверните голову")
+        }
+        else if(eyesGoodAngle && !shouldersGoodAngle){
+            say("поверните плечи")
+        }
+        else if(!eyesGoodAngle && !shouldersGoodAngle){
+            say("поверните голову и плечи")
+        }
+        else if(!eyesGoodAngle && shouldersGoodAngle){
+            if(!goodPosition){
+                say("вы хорошо сидите");
+                goodPosition = true;
+            }
         }
     }
-    else if(!eyes && shoulders){
-        say("поправь голову")
-    }
-    else if(eyes && !shoulders){
-        say("поправь плечи")
-    }
-    else if(!eyes && !shoulders){
-        say("сядь как человек")
+
+    if(!(eyesVisible && eyesGoodAngle && (!shouldersVisible || shouldersGoodAngle))){
+        goodPosition = false;
     }
 }
 
-async function performDetections(model, camera, [imgHeight, imgWidth]){
-    const pose = await getKeyPoints(camera, model);
+function drawPoints(pose, ctx, threshold = 0.5){
+    // Clear canvas
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
-    console.log(pose)
+    let radius = 5;
+
+    pose.keypoints.forEach(point => {
+        if(point.score > threshold){
+            ctx.beginPath();
+            ctx.arc(point.position.x, point.position.y, radius, 0, 2 * Math.PI, false);
+            ctx.fillStyle = 'green';
+            ctx.fill();
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = '#003300';
+            ctx.stroke();
+        }
+    });
+
+}
+
+async function performDetections(model, camera, [ctx, imgHeight, imgWidth]){
+    const pose = await getKeyPoints(camera, model);
+    console.log(pose);
+
     checkPose(pose);
+    drawPoints(pose, ctx);
+
 }
 
 
