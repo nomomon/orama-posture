@@ -128,7 +128,7 @@ function checkPose(pose) {
             say("поверните голову и плечи")
         }
         else if(!eyesGoodAngle && shouldersGoodAngle){
-            if(!goodPosition){
+            if(!goodPosition && (eyesVisible && eyesGoodAngle && (!shouldersVisible || shouldersGoodAngle))){
                 say("вы хорошо сидите");
                 goodPosition = true;
             }
