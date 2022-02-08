@@ -18,7 +18,7 @@ function updatePoseData(pose) {
     let eyesVisible = rightEye.score > threshold && leftEye.score > threshold,
         shouldersVisible = rightShoulder.score > threshold && leftShoulder.score > threshold;
 
-    let noseBetweenEars = (rightEar.position.y + leftEar.position.y - nose.position.y) < 20;
+    let noseBetweenEars = ((rightEar.position.y + leftEar.position.y) / 2- nose.position.y) < 20;
 
     poseData.total = poseData.total.map(el => el+1);
     poseData.bad[0] += shouldersVisible && !shouldersGoodAngle;
