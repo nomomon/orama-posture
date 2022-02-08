@@ -18,12 +18,12 @@ function updatePoseData(pose) {
     let eyesVisible = rightEye.score > threshold && leftEye.score > threshold,
         shouldersVisible = rightShoulder.score > threshold && leftShoulder.score > threshold;
 
-    let noseBetweenEyes = (rightEye.position.y + leftEye.position.y - nose.position.y) < 20;
+    let noseBetweenEars = (rightEar.position.y + leftEar.position.y - nose.position.y) < 20;
 
     poseData.total = poseData.total.map(el => el+1);
     poseData.bad[0] += shouldersVisible && !shouldersGoodAngle;
     poseData.bad[1] += eyesVisible && !eyesGoodAngle;
-    poseData.bad[2] += eyesVisible && !noseBetweenEyes;
+    poseData.bad[2] += eyesVisible && !noseBetweenEars;
 
     poseData.percent = [0,0,0].map((el, i) => 
         poseData.bad[i] / poseData.total[i]
