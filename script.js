@@ -95,13 +95,7 @@ function checkPose(pose) {
         rightEar = pose.keypoints[4],
         leftEar = pose.keypoints[3], 
         rightShoulder = pose.keypoints[6], 
-        leftShoulder = pose.keypoints[5], 
-        rightWrist = pose.keypoints[10], 
-        leftWrist = pose.keypoints[9], 
-        rightKnee = pose.keypoints[14], 
-        leftKnee = pose.keypoints[13], 
-        rightAnkle = pose.keypoints[16], 
-        leftAnkle = pose.keypoints[15];
+        leftShoulder = pose.keypoints[5];
 
     let eyesGradient = gradient(rightEye.position, leftEye.position),
         shouldersGradient = gradient(rightShoulder.position, leftShoulder.position);
@@ -109,43 +103,46 @@ function checkPose(pose) {
     let eyesGoodAngle = Math.abs(eyesGradient) < 0.1,
         shouldersGoodAngle = Math.abs(shouldersGradient) < 0.1;
     
-    let eyesVisible = rightEye.score > threshold && leftEye.score > threshold,
+    let noseVisible = nose.score > threshold,
+        eyesVisible = rightEye.score > threshold && leftEye.score > threshold,
+        earsVisible = rightEar.score > threshold && leftEar.score > threshold,
         shouldersVisible = rightShoulder.score > threshold && leftShoulder.score > threshold;
 
-    let noseBetweenEars = Math.abs((rightEar.position.y + leftEar.position.y) / 2 - nose.position.y) < 20;
+    let noseEar = (rightEar.position.y + leftEar.position.y) / 2 - nose.position.y,
+        noseBetweenEars = Math.abs(noseEar) < 20;
 
-    if(!eyesVisible){
-        say("поверните лицо в сторону экрана, ваше лицо не видно");
-    }
-    else if(!shouldersVisible){
-        if(!eyesGoodAngle){
-            say("поверните голову")
+    let positionNowGood = eyesVisible && 
+                          eyesGoodAngle &&
+                          noseBetweenEars &&
+                          !(shouldersVisible && !shouldersGoodAngle);
+    
+    if(positionNowGood && !window.speechSynthesis.speaking && !said){
+        say("вы хорошо сидите");
+        said = true;
+    }else if(!positionNowGood){
+        said = false;
+        
+        if(eyesVisible && !eyesGoodAngle){
+            say("выпрямите голову");
         }
-    }
-    else{
-        if(!noseBetweenEars){
-            say("поднимите голову")
-        }
-
-        if(!eyesGoodAngle && shouldersGoodAngle){
-            say("поверните голову")
-        }
-        else if(eyesGoodAngle && !shouldersGoodAngle){
-            say("поверните плечи")
-        }
-        else if(!eyesGoodAngle && !shouldersGoodAngle){
-            say("поверните голову и плечи")
-        }
-        else if(!eyesGoodAngle && shouldersGoodAngle){
-            if(!goodPosition && (eyesVisible && eyesGoodAngle && (!shouldersVisible || shouldersGoodAngle))){
-                say("вы хорошо сидите");
-                goodPosition = true;
+        if(noseVisible && earsVisible && !noseBetweenEars){
+            if(noseEar < 0){
+                say("поднимите лицо");
+            }else{
+                say("опустите лицо");
             }
         }
-    }
-
-    if(!(eyesVisible && eyesGoodAngle && (!shouldersVisible || shouldersGoodAngle))){
-        goodPosition = false;
+        if(!earsVisible){
+            if(rightEar.score < threshold && leftEar.score > threshold){
+                say("поверните лицо левее")
+            }
+            if(rightEar.score > threshold && leftEar.score < threshold){
+                say("поверните лицо правее")
+            }
+        }
+        if(shouldersVisible && !shouldersGoodAngle){
+            say("выровняйте плечи")
+        }
     }
 }
 
@@ -179,7 +176,7 @@ async function performDetections(model, camera, [ctx, imgHeight, imgWidth]){
 }
 
 
-let model, stop = false;
+let model, stop = false, said = false;
 async function doStuff() {
     try {
         const camera = document.getElementById('camera')
