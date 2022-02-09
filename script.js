@@ -51,7 +51,7 @@ function loadModel([ctx, height, width]){
 
 async function getKeyPoints(image, model){
     const pose = await model.estimateSinglePose(image, {
-        flipHorizontal: false
+        flipHorizontal: true
     })
     
     return pose
@@ -89,8 +89,11 @@ function gradient(p1, p2){
 function checkPose(pose) {
     let threshold = 0.5;
 
-    let rightEye = pose.keypoints[2], 
+    let nose = pose.keypoints[0],
+        rightEye = pose.keypoints[2], 
         leftEye = pose.keypoints[1], 
+        rightEar = pose.keypoints[4],
+        leftEar = pose.keypoints[3], 
         rightShoulder = pose.keypoints[6], 
         leftShoulder = pose.keypoints[5], 
         rightWrist = pose.keypoints[10], 
@@ -109,6 +112,8 @@ function checkPose(pose) {
     let eyesVisible = rightEye.score > threshold && leftEye.score > threshold,
         shouldersVisible = rightShoulder.score > threshold && leftShoulder.score > threshold;
 
+    let noseBetweenEars = Math.abs((rightEar.position.y + leftEar.position.y) / 2 - nose.position.y) < 20;
+
     if(!eyesVisible){
         say("поверните лицо в сторону экрана, ваше лицо не видно");
     }
@@ -118,6 +123,10 @@ function checkPose(pose) {
         }
     }
     else{
+        if(!noseBetweenEars){
+            say("поднимите голову")
+        }
+
         if(!eyesGoodAngle && shouldersGoodAngle){
             say("поверните голову")
         }
@@ -143,7 +152,8 @@ function checkPose(pose) {
 function drawPoints(pose, ctx, threshold = 0.5){
     // Clear canvas
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-
+    ctx.scale(-1,1);
+    
     let radius = 5;
 
     pose.keypoints.forEach(point => {
@@ -166,7 +176,6 @@ async function performDetections(model, camera, [ctx, imgHeight, imgWidth]){
 
     checkPose(pose);
     drawPoints(pose, ctx);
-
 }
 
 
