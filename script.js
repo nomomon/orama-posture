@@ -87,7 +87,7 @@ function gradient(p1, p2){
 }
 
 function checkPose(pose) {
-    let threshold = 0.8;
+    let threshold = 0.5;
 
     let nose = pose.keypoints[0],
         rightEye = pose.keypoints[2], 
