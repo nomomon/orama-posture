@@ -148,8 +148,8 @@ function checkPose(pose) {
 
 function drawPoints(pose, ctx, threshold = 0.5){
     // Clear canvas
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
     ctx.scale(-1,1);
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
     
     let radius = 5;
 
