@@ -87,7 +87,7 @@ function gradient(p1, p2){
 }
 
 function checkPose(pose) {
-    let threshold = 0.5;
+    let threshold = 0.8;
 
     let nose = pose.keypoints[0],
         rightEye = pose.keypoints[2], 
@@ -148,7 +148,6 @@ function checkPose(pose) {
 
 function drawPoints(pose, ctx, threshold = 0.5){
     // Clear canvas
-    ctx.scale(-1,1);
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
     
     let radius = 5;
