@@ -11,15 +11,30 @@
     <meta http-equiv=”CACHE-CONTROL” content=”NO-CACHE”>
 </head>
 <body>
-    
-    <button onclick="(() => {doStuff(); $('button').parentElement.removeChild($('button'))})()">нажми когда готов</button>
+    <div id="tutorial">
+        <img src="images/tutorial.png" alt="туториал как сидеть">
+        <br>
+        Для того чтобы сидеть прямо достаточно:
+        <ul>
+            <li>Деражть глаза на одном уровне</li>
+            <li>Держать плечи на одном уровне</li>
+            <li>И держать нос между ушей</li>
+          </ul>
+        Компьютер будет предупреждать вас когда какой-то из пунктов не выполняется. 
+        <br>
+        <br>
+        <button onclick="(() => {
+            doStuff(); 
+            $('#tutorial').parentElement.removeChild($('#tutorial'))
+        })()">Окей, я готов</button>
+    </div>
 
     <video id="camera" autoplay></video>
     <canvas id="detection"></canvas>
 </body>
 
 <style>
-#detection, #camera{
+#detection, #camera, #tutorial{
     position: absolute;
     top:50%;
     left:50%;
@@ -28,6 +43,13 @@
 
 #camera{
     transform: translate3d(-50%, -50%, 0) scaleX(-1);
+}
+
+#tutorial, #tutorial img{
+    width:25vw;
+}
+#tutorial button{
+    margin:auto;
 }
 </style>
 
