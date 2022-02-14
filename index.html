@@ -10,12 +10,12 @@
     <div class="container">
         <div class="item item_side">
             <h1>
-                Settings
+                Настройки
             </h1>
         </div>
         <div class="item item_main">
             <h1>
-                Camera
+                Камера
             </h1>
             <div id="camera_box">
                 <video id="camera" autoplay></video>
@@ -24,17 +24,21 @@
         </div>
         <div class="item item_side">
             <h1>
-                Analytics
+                Аналитика
             </h1>
             <div id="analytics">
-
+                <canvas id="chart"></canvas>
             </div>
         </div>
     </div>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
-    <script src="../script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="./scripts/analytics.js"></script>
+    <script src="./scripts/camera.js"></script>
+    <script src="./scripts/talk.js"></script>
+    <script src="./scripts/script.js"></script>
     <script>
         doStuff();
     </script>

@@ -54,3 +54,16 @@ body, .container{
 #camera_box #camera{
     transform: translate3d(-50%, -50%, 0) scaleX(-1);
 }
+
+#analytics{
+    position: relative;
+    width:100%;
+    height: 75%;
+}
+
+#analytics #chart{
+    position: absolute;
+    top:10%;
+    left:50%;
+    transform: translate3d(-50%, 0, 0);
+}
