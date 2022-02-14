@@ -164,10 +164,10 @@ function drawPoints(pose, ctx, threshold = 0.5){
         if(point.score > threshold){
             ctx.beginPath();
             ctx.arc(point.position.x, point.position.y, radius, 0, 2 * Math.PI, false);
-            ctx.fillStyle = 'green';
+            ctx.fillStyle = '#66CCFF';
             ctx.fill();
             ctx.lineWidth = 5;
-            ctx.strokeStyle = '#003300';
+            ctx.strokeStyle = '#003399';
             ctx.stroke();
         }
     });

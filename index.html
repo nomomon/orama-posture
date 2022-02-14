@@ -4,61 +4,39 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-
-    <meta http-equiv=”Pragma” content=”no-cache”>
-    <meta http-equiv=”Expires” content=”-1″>
-    <meta http-equiv=”CACHE-CONTROL” content=”NO-CACHE”>
+    <title>Orama Posture</title>
 </head>
 <body>
-    <div id="tutorial">
-        <img src="images/tutorial.png" alt="туториал как сидеть">
-        <br>
-        Для того чтобы сидеть прямо достаточно:
-        <ul>
-            <li>Деражть глаза на одном уровне</li>
-            <li>Держать плечи на одном уровне</li>
-            <li>И держать нос между ушей</li>
-          </ul>
-        Компьютер будет предупреждать вас когда какой-то из пунктов не выполняется. 
-        <br>
-        <br>
-        <button onclick="(() => {
-            doStuff(); 
-            $('#tutorial').parentElement.removeChild($('#tutorial'))
-        })()">Окей, я готов</button>
+    <div class="container">
+        <div class="item item_side">
+            <h1>
+                Settings
+            </h1>
+        </div>
+        <div class="item item_main">
+            <h1>
+                Camera
+            </h1>
+            <div id="camera_box">
+                <video id="camera" autoplay></video>
+                <canvas id="detection"></canvas>
+            </div>
+        </div>
+        <div class="item item_side">
+            <h1>
+                Analytics
+            </h1>
+            <div id="analytics">
+
+            </div>
+        </div>
     </div>
-
-    <video id="camera" autoplay></video>
-    <canvas id="detection"></canvas>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
+    <script src="../script.js"></script>
+    <script>
+        doStuff();
+    </script>
 </body>
-
-<style>
-#detection, #camera, #tutorial{
-    position: absolute;
-    top:50%;
-    left:50%;
-    transform: translate3d(-50%, -50%, 0);
-}
-
-#camera{
-    transform: translate3d(-50%, -50%, 0) scaleX(-1);
-}
-
-#tutorial, #tutorial img{
-    width:25vw;
-}
-
-#tutorial img{
-    filter: drop-shadow(0 7px 4px #00000050);
-}
-#tutorial button{
-    margin:auto;
-}
-</style>
-
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
-<script src="script.js"></script>
-
 </html>
