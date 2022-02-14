@@ -144,6 +144,14 @@ function checkPose(pose) {
             say("выровняйте плечи")
         }
     }
+
+    return {
+        "eyesGoodAngle": !(eyesVisible && !eyesGoodAngle),
+        "shouldersGoodAngle": !(shouldersVisible && !shouldersGoodAngle),
+        "noseBetweenEars": !(noseVisible && earsVisible && !noseBetweenEars),
+        "earsVisible": earsVisible,
+        "time": new Date()
+    }
 }
 
 function drawPoints(pose, ctx, threshold = 0.5){
@@ -168,10 +176,11 @@ function drawPoints(pose, ctx, threshold = 0.5){
 
 async function performDetections(model, camera, [ctx, imgHeight, imgWidth]){
     const pose = await getKeyPoints(camera, model);
-    console.log(pose);
 
-    checkPose(pose);
     drawPoints(pose, ctx);
+
+    const results = checkPose(pose);
+    
 }
 
 
