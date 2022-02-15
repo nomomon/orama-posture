@@ -56,31 +56,31 @@ function checkPose(pose) {
                           !(shouldersVisible && !shouldersGoodAngle);
     
     if(positionNowGood && !window.speechSynthesis.speaking && !said){
-        say("вы хорошо сидите");
+        say("You are sitting good");
         said = true;
     }else if(!positionNowGood){
         said = false;
         
         if(eyesVisible && !eyesGoodAngle){
-            say("выпрямите голову");
+            say("straighten your head");
         }
         if(noseVisible && earsVisible && !noseBetweenEars){
             if(noseEar < 0){
-                say("поднимите лицо");
+                say("raise your head");
             }else{
-                say("опустите лицо");
+                say("lower your head");
             }
         }
         if(!earsVisible){
             if(rightEar.score < threshold && leftEar.score > threshold){
-                say("поверните лицо левее")
+                say("turn your face left")
             }
             if(rightEar.score > threshold && leftEar.score < threshold){
-                say("поверните лицо правее")
+                say("turn your face right")
             }
         }
         if(shouldersVisible && !shouldersGoodAngle){
-            say("выровняйте плечи")
+            say("straighten your shoulders")
         }
     }
 
@@ -140,6 +140,9 @@ async function doStuff() {
                     }
                 });
             })
+
+            timeInMinutes += 300 / 1000 / 60;
+            updateClock();
         }, 300);
 
     } catch (e) {

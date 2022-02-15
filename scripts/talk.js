@@ -7,13 +7,15 @@ function getRusVoice(voices){
 	return null;
 }
 
-function say(text, lang="ru"){
+function say(text, lang="en"){
     const voices = speechSynthesis.getVoices();
     if(voices.length > 0){
         const tts = new SpeechSynthesisUtterance(text);
     
         if(lang == "ru"){
             tts.lang = "ru-RU";
+        }else if(lang == "en"){
+            tts.lang = "en-US"
         }
 
         if(!window.speechSynthesis.speaking){
