@@ -99,6 +99,7 @@ function drawPoints(pose, ctx, threshold = 0.5){
     
     let radius = 5;
 
+    if(settings.drawPoints)
     pose.keypoints.forEach(point => {
         if(point.score > threshold){
             ctx.beginPath();

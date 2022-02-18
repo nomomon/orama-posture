@@ -18,7 +18,7 @@ function say(text, lang="en"){
             tts.lang = "en-US"
         }
 
-        if(!window.speechSynthesis.speaking){
+        if(!window.speechSynthesis.speaking && settings.voiceAssistant){
             return window.speechSynthesis.speak(tts);
         }
     }

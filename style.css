@@ -67,3 +67,24 @@ body, .container{
     left:50%;
     transform: translate3d(-50%, 0, 0);
 }
+
+#settings{
+
+}
+#settings .row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+#settings .column {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+    align-content: center;
+    justify-content: center;
+
+    height: 2em;
+}
