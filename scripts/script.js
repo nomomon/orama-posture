@@ -2,6 +2,11 @@ function $(querySelector, element = document){
     return element.querySelector(querySelector);
 }
 
+function roundTo(num, decimalPlaces){
+    let pow = Math.pow(10, decimalPlaces);
+    return Math.round(num * pow) / pow;
+}
+
 function loadModel([ctx, height, width]){
     const params = {
         architecture: 'MobileNetV1',
@@ -121,7 +126,7 @@ async function performDetections(model, camera, [ctx, imgHeight, imgWidth]){
 
     const results = checkPose(pose);
     updatePoseData(results);
-    updateData(myChart, poseData.percent)
+    updateData(barChart, poseData.percent)
 }
 
 
@@ -135,7 +140,7 @@ async function doStuff() {
         const interval = setInterval(() => {
             if(!settings.programWorking || !document.hasFocus()) return 0;
             
-           requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
                 performDetections(model, camera, camDetails).then(() => {
                     if(stop){
                         tf.dispose([model]);
@@ -144,7 +149,27 @@ async function doStuff() {
                 });
             })
 
-            timeInMinutes += 300 / 1000 / 60;
+            timeInMinutes = roundTo(timeInMinutes+.005, 3) // 0.005 = 300 / 1000 / 60;
+
+            // minute has passed
+            if(roundTo(Math.trunc(timeInMinutes) - timeInMinutes, 3) == 0){
+                let date = new Date(),
+                    hours = date.getHours(),
+                    minutes = ('0' + date.getMinutes()).slice(-2);
+                let time = `${hours}:${minutes}`;
+
+                qualityTodayMemory[time] = (sumOfQualities / totalQualities)*100 || 0;
+                localStorage.setItem('today', JSON.stringify(qualityTodayMemory));
+                
+                let data = Object.values(qualityTodayMemory)
+                let labels = Object.keys(qualityTodayMemory)
+                
+                updateData(minutesSeriesChart, data, labels);
+
+                totalQualities = 0;
+                sumOfQualities = 0;
+            }
+
             updateClock();
         }, 300);
 
@@ -153,7 +178,12 @@ async function doStuff() {
     }
 }
 
-const myChart = new Chart(
-    $('#chart'),
-    config
+const barChart = new Chart(
+    $('#bar_chart'),
+    barChartConfig
 );
+
+const minutesSeriesChart = new Chart(
+    $('#minute_series_chart'),
+    minutesSeriesChartConfig
+)

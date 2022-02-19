@@ -30,10 +30,12 @@ body, .container{
 }
 .item_main{
     flex-grow: 2;
+    max-width:40%;
     font-size: large;
 }
 .item_side{
     flex-grow: 1;
+    max-width: 30%;
 }
 
 #camera_box{
@@ -56,16 +58,16 @@ body, .container{
 }
 
 #analytics{
-    position: relative;
     width:100%;
+    margin: auto;
     height: 75%;
 }
 
-#analytics #chart{
-    position: absolute;
-    top:10%;
-    left:50%;
-    transform: translate3d(-50%, 0, 0);
+#analytics canvas{
+    display: block;
+    width: 100% !important;
+    max-width:calc(100vw / 5);
+    margin: auto;
 }
 
 #settings{

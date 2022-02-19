@@ -1,5 +1,8 @@
-function updateData(chart, data) {
+function updateData(chart, data, labels = 0) {
     chart.data.datasets[0].data = data;
+    if(labels != 0){
+        chart.data.labels = labels;
+    }
     chart.update();
 }
 
@@ -22,6 +25,9 @@ function updatePoseData(results) {
     poseData.percent = [0, 0, 0, 0, 0].map((el, i) =>
         poseData.counter[i] / poseData.total[i] * 100
     );
+
+    sumOfQualities += good;
+    totalQualities += 1;
 }
 
 const poseData = {
@@ -59,7 +65,7 @@ const images = [
     'images/icons/good.png',
 ]
 
-const config = {
+const barChartConfig = {
     plugins: [{
         afterDraw: chart => {
             var ctx = chart.ctx;
@@ -115,4 +121,53 @@ const config = {
             }
         },
     },
+};
+/*-----------------------------------*/
+let sumOfQualities = 0, totalQualities = 0, qualityTodayMemory;
+
+if(!localStorage.getItem('today')){
+    localStorage.setItem('today', JSON.stringify({}));
+}
+qualityTodayMemory = JSON.parse(localStorage.getItem('today'));
+
+const minutesSeriesChartConfig = {
+    type: "line",
+    data: {
+        labels: [],
+        datasets: [{
+            data: qualityTodayMemory, // Set initially to empty data
+            label: "Quality of Posture",
+            borderColor: "#3e95cd",
+            fill: false
+        }]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                type: "time",
+                distribution: "linear"
+            }],
+            y: {
+                ticks: {
+                    min: 0,
+                    max: 100, // Your absolute max value
+                    callback: function (value) {
+                        return (value).toFixed(0) + '%'; // convert it to percentage
+                    },
+                },
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Percentage',
+                },
+            },
+            title: {
+                display: false
+            }
+        },
+        elements: {
+            line: {
+                tension: 0.4
+            }
+        }
+    }
 };
