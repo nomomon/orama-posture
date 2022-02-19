@@ -20,7 +20,7 @@ function updatePoseData(results) {
     poseData.counter[4] += good;
 
     poseData.percent = [0, 0, 0, 0, 0].map((el, i) =>
-        poseData.counter[i] / poseData.total[i]
+        poseData.counter[i] / poseData.total[i] * 100
     );
 }
 
@@ -32,11 +32,11 @@ const poseData = {
 
 const data = {
     labels: [
-        'face not facing the screen',
-        'head is slanted',
-        'head is lowered/raised',
-        'shoulders are slanted',
-        'good',
+        'Face not facing the screen',
+        'Head is slanted',
+        'Head is lowered/raised',
+        'Shoulders are slanted',
+        'Good',
     ],
     datasets: [{
         label: '% of time',
@@ -91,7 +91,7 @@ const config = {
                     min: 0,
                     max: 100, // Your absolute max value
                     callback: function (value) {
-                        return (value * 100).toFixed(0) + '%'; // convert it to percentage
+                        return (value).toFixed(0) + '%'; // convert it to percentage
                     },
                 },
                 scaleLabel: {
