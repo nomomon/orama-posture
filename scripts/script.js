@@ -133,6 +133,8 @@ async function doStuff() {
         model = await loadModel(camDetails)
 
         const interval = setInterval(() => {
+            if(!settings.programWorking) return 0;
+            
            requestAnimationFrame(() => {
                 performDetections(model, camera, camDetails).then(() => {
                     if(stop){

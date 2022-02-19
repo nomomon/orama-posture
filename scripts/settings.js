@@ -2,6 +2,7 @@ if(!localStorage.getItem('settings')){
     let template = JSON.stringify({
         voiceAssistant:true,
         drawPoints:true,
+        programWorking:true,
     });
     localStorage.setItem('settings', template);
 }
