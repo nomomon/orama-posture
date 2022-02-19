@@ -20,3 +20,7 @@ document.querySelectorAll("input[type=checkbox]").forEach(el => {
         localStorage.setItem('settings', JSON.stringify(settings));
     })
 });
+
+function clearData(){
+    localStorage.clear()
+}
