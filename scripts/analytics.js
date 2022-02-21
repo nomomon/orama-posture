@@ -53,7 +53,8 @@ const data = {
         pointBackgroundColor: 'rgb(255, 99, 132)',
         pointBorderColor: '#fff',
         pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgb(255, 99, 132)'
+        pointHoverBorderColor: 'rgb(255, 99, 132)',
+        minBarLength: 3
     }]
 };
 
@@ -69,21 +70,29 @@ const barChartConfig = {
     plugins: [{
         afterDraw: chart => {
             var ctx = chart.ctx;
+            var xAxis = chart.scales['x'];
             var yAxis = chart.scales['y'];
             var h = yAxis.getPixelForTick(1) - yAxis.getPixelForTick(0);
             yAxis.ticks.forEach((value, index) => {
                 var y = yAxis.getPixelForTick(index);
+                var x = xAxis.left;
                 var img = new Image();
-                img.src = images[index],
-                    ctx.drawImage(img, 0, 0, img.width, img.height, 10, y - 16, h, h);
+                img.src = images[index];
+                var w = img.width / img.height * h;
+                ctx.drawImage(img, 0, 0, img.width, img.height, x - w*1.75, y - 0.5*h , w, h);
             });
         }
     }],
     type: 'bar',
     data: data,
     responsive: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
     options: {
+        layout: {
+            padding: {
+                left: 25
+            }
+        },
         indexAxis: 'y',
         scales: {
             y: {
@@ -103,7 +112,7 @@ const barChartConfig = {
                 scaleLabel: {
                     display: true,
                     labelString: 'Percentage',
-                },
+                }
             },
         },
         legend: {
