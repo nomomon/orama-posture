@@ -65,7 +65,7 @@ body, .container{
 
 #analytics canvas{
     display: block;
-    height: calc(100% / 3) !important;
+    height: calc(100% / 2.5) !important;
     max-width: 100% !important;
     margin: auto;
 }

@@ -72,14 +72,21 @@ const barChartConfig = {
             var ctx = chart.ctx;
             var xAxis = chart.scales['x'];
             var yAxis = chart.scales['y'];
-            var h = yAxis.getPixelForTick(1) - yAxis.getPixelForTick(0);
+            var interval = xAxis.width / yAxis.ticks.length;
+            var h = 40;
             yAxis.ticks.forEach((value, index) => {
-                var y = yAxis.getPixelForTick(index);
-                var x = xAxis.left;
                 var img = new Image();
                 img.src = images[index];
                 var w = img.width / img.height * h;
-                ctx.drawImage(img, 0, 0, img.width, img.height, x - w*1.75, y - 0.5*h , w, h);
+
+                var img_x = (index + 1) * interval - w/2;
+                var img_y = yAxis.bottom + h+10 - h/2;
+                
+                var text_x = (index + 1) * interval - 16/2 - w/2;
+                var text_y = yAxis.bottom + h+10;
+
+                ctx.fillText(index+1+".", text_x, text_y);
+                ctx.drawImage(img, 0, 0, img.width, img.height, img_x, img_y, w, h);
             });
         }
     }],
@@ -90,7 +97,7 @@ const barChartConfig = {
     options: {
         layout: {
             padding: {
-                left: 25
+                bottom: 40
             }
         },
         indexAxis: 'y',
@@ -98,7 +105,10 @@ const barChartConfig = {
             y: {
                 beginAtZero: true,
                 ticks: {
-                    display: false
+                    display: true,
+                    callback: function (value, index) {
+                        return index + 1;
+                    },
                 }
             },
             x: {
@@ -150,9 +160,11 @@ const minutesSeriesChartConfig = {
             fill: false
         }]
     },
-    options: {
+    options: {    
+        responsive: true,
+        maintainAspectRatio: true,
         scales: {
-            xAxes: [{
+            x: [{
                 type: "time",
                 distribution: "linear"
             }],
