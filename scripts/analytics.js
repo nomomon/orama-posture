@@ -144,10 +144,18 @@ const barChartConfig = {
 /*-----------------------------------*/
 let sumOfQualities = 0, totalQualities = 0, qualityTodayMemory;
 
-if(!localStorage.getItem('today')){
-    localStorage.setItem('today', JSON.stringify({}));
+const today = (()=>{
+    let date = new Date(),
+        day = ('0' + date.getDate()).slice(-2),
+        month = ('0' + (date.getMonth() + 1)).slice(-2),
+        year = date.getFullYear();
+    return `${year}.${month}.${day}`;
+})();
+
+if(!localStorage.getItem(today)){
+    localStorage.setItem(today, JSON.stringify({}));
 }
-qualityTodayMemory = JSON.parse(localStorage.getItem('today'));
+qualityTodayMemory = JSON.parse(localStorage.getItem(today));
 
 const minutesSeriesChartConfig = {
     type: "line",

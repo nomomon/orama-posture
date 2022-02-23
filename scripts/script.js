@@ -159,7 +159,7 @@ async function doStuff() {
                 let time = `${hours}:${minutes}`;
 
                 qualityTodayMemory[time] = (sumOfQualities / totalQualities)*100 || 0;
-                localStorage.setItem('today', JSON.stringify(qualityTodayMemory));
+                localStorage.setItem(today, JSON.stringify(qualityTodayMemory));
                 
                 let data = Object.values(qualityTodayMemory)
                 let labels = Object.keys(qualityTodayMemory)
