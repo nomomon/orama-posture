@@ -172,10 +172,10 @@ const minutesSeriesChartConfig = {
         responsive: true,
         maintainAspectRatio: true,
         scales: {
-            x: [{
-                type: "time",
-                distribution: "linear"
-            }],
+            // x: [{
+            //     type: "time",
+            //     distribution: "linear"
+            // }],
             y: {
                 ticks: {
                     min: 0,
