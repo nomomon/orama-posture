@@ -63,7 +63,7 @@ body, .container{
     height: 75%;
 }
 
-#analytics canvas{
+#analytics .graph_box{
     display: block;
     height: calc(100% / 2.5) !important;
     max-width: 100% !important;
