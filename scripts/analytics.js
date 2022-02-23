@@ -72,20 +72,20 @@ const barChartConfig = {
             var ctx = chart.ctx;
             var xAxis = chart.scales['x'];
             var yAxis = chart.scales['y'];
-            var interval = xAxis.width / yAxis.ticks.length;
+            var interval = xAxis.width / images.length;
             var h = 40;
-            yAxis.ticks.forEach((value, index) => {
+            yAxis.ticks.forEach(({label}) => {
                 var img = new Image();
-                img.src = images[index];
+                img.src = images[label - 1];
                 var w = img.width / img.height * h;
 
-                var img_x = (index + 1) * interval - w/2;
+                var img_x = label * interval - w/2;
                 var img_y = yAxis.bottom + h+10 - h/2;
                 
-                var text_x = (index + 1) * interval - 16/2 - w/2;
+                var text_x = label * interval - 16/2 - w/2;
                 var text_y = yAxis.bottom + h+10;
 
-                ctx.fillText(index+1+".", text_x, text_y);
+                ctx.fillText(label+".", text_x, text_y);
                 ctx.drawImage(img, 0, 0, img.width, img.height, img_x, img_y, w, h);
             });
         }
@@ -106,6 +106,7 @@ const barChartConfig = {
                 beginAtZero: true,
                 ticks: {
                     display: true,
+                    autoSkip: false,
                     callback: function (value, index) {
                         return index + 1;
                     },
