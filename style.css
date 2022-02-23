@@ -68,6 +68,7 @@ body, .container{
     height: calc(100% / 2.5) !important;
     max-width: 100% !important;
     margin: auto;
+    margin-bottom: 1.5em;
 }
 
 #settings{
