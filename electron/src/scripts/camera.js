@@ -13,16 +13,19 @@ async function setupWebcam(videoEl) {
         }
         return new Promise((resolve, _) => {
             videoEl.onloadedmetadata = () => {
-                videoEl.width = videoEl.clientWidth
-                videoEl.height = videoEl.clientHeight
-
                 const imgWidth = videoEl.clientWidth
                 const imgHeight = videoEl.clientHeight
-                
+
                 const detection = document.getElementById('detection')
                 const ctx = detection.getContext('2d')
-                detection.width = imgWidth
-                detection.height = imgHeight
+
+                function resizeCanvas() {
+                    detection.width = videoEl.clientWidth;
+                    detection.height = videoEl.clientHeight;
+                }
+                resizeCanvas()
+                new ResizeObserver(resizeCanvas).observe(videoEl);
+
 
                 resolve([ctx, imgHeight, imgWidth])
             }

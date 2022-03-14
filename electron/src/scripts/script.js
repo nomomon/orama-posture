@@ -11,7 +11,7 @@ function loadModel([ctx, height, width]) {
     const params = {
         architecture: 'MobileNetV1',
         outputStride: 16,
-        inputResolution: { width: width, height: height },
+        inputResolution: { width: size, height: Math.round(size * (height / width)) },
         multiplier: 0.75
     }
 
@@ -19,11 +19,21 @@ function loadModel([ctx, height, width]) {
 }
 
 async function getKeyPoints(image, model) {
-    const pose = await model.estimateSinglePose(image, {
+    resizeImage(image, size);
+
+    const pose = await model.estimateSinglePose($('#cameraProjection'), {
         flipHorizontal: true
     })
 
     return pose
+}
+
+function resizeImage(imageEl, newWidth) {
+    let canvas = $('#cameraProjection'), ctx = canvas.getContext('2d');
+
+    canvas.width = 200;
+    canvas.height = 150;
+    ctx.drawImage(imageEl, 0, 0, 200, 150);
 }
 
 function gradient(p1, p2) {
@@ -103,12 +113,13 @@ function drawPoints(pose, ctx, threshold = 0.5) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
     let radius = 5;
+    let coef = ctx.canvas.width / size;
 
     if (settings.drawPoints)
         pose.keypoints.forEach(point => {
             if (point.score > threshold) {
                 ctx.beginPath();
-                ctx.arc(point.position.x, point.position.y, radius, 0, 2 * Math.PI, false);
+                ctx.arc(point.position.x * coef, point.position.y * coef, radius, 0, 2 * Math.PI, false);
                 ctx.fillStyle = '#66CCFF';
                 ctx.fill();
                 ctx.lineWidth = 5;
@@ -130,10 +141,10 @@ async function performDetections(model, camera, [ctx, imgHeight, imgWidth]) {
 }
 
 
-let model, stop = false, said = false;
+let model, stop = false, said = false, size = 200;
 async function doStuff() {
     try {
-        const camera = document.getElementById('camera')
+        const camera = $('#camera')
         const camDetails = await setupWebcam(camera)
         model = await loadModel(camDetails)
 

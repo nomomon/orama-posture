@@ -45,6 +45,7 @@ body,
   height: 75%;
 }
 #camera_box #camera,
+#camera_box #cameraProjection,
 #camera_box #detection {
   position: absolute;
   top: 50%;
@@ -55,7 +56,8 @@ body,
   border-radius: 16px;
   box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.4);
 }
-#camera_box #camera {
+#camera_box #camera,
+#camera_box #cameraProjection {
   transform: translate3d(-50%, -50%, 0) scaleX(-1);
 }
 
@@ -73,8 +75,6 @@ body,
   margin-bottom: 1.5em;
 }
 
-#settings {
-}
 #settings .row {
   display: flex;
   flex-direction: row;
