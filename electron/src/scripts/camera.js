@@ -26,7 +26,6 @@ async function setupWebcam(videoEl) {
                 resizeCanvas()
                 new ResizeObserver(resizeCanvas).observe(videoEl);
 
-
                 resolve([ctx, imgHeight, imgWidth])
             }
         })

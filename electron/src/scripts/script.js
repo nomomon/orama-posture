@@ -1,3 +1,6 @@
+const tf = require("@tensorflow/tfjs");
+const posenet = require("@tensorflow-models/posenet");
+
 function $(querySelector, element = document) {
     return element.querySelector(querySelector);
 }
