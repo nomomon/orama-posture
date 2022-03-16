@@ -1,3 +1,7 @@
+var tabActive = true;
+window.onfocus = () => { tabActive = true; }
+window.onblur = () => { tabActive = false; }
+
 const tf = require("@tensorflow/tfjs");
 const posenet = require("@tensorflow-models/posenet");
 
@@ -154,14 +158,24 @@ async function doStuff() {
         const interval = setInterval(() => {
             if (!settings.programWorking) return 0;
 
-            requestAnimationFrame(() => {
+            if (tabActive) {
+                requestAnimationFrame(() => {
+                    performDetections(model, camera, camDetails).then(() => {
+                        if (stop) {
+                            tf.dispose([model]);
+                            clearInterval(interval);
+                        }
+                    });
+                })
+            }
+            else {
                 performDetections(model, camera, camDetails).then(() => {
                     if (stop) {
                         tf.dispose([model]);
                         clearInterval(interval);
                     }
                 });
-            })
+            }
 
             timeInMinutes = roundTo(timeInMinutes + .005, 3) // 0.005 = 300 / 1000 / 60;
 
