@@ -47,7 +47,8 @@
   "dependencies": {
     "@tensorflow-models/posenet": "^2.2.2",
     "@tensorflow/tfjs": "^3.14.0",
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "speech-synthesis": "^0.3.2"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.63",
