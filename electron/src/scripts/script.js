@@ -122,11 +122,21 @@ function drawPoints(pose, ctx, threshold = 0.5) {
     let radius = 5;
     let coef = ctx.canvas.width / size;
 
-    if (settings.drawPoints)
-        pose.keypoints.forEach(point => {
-            if (point.score > threshold) {
+    if (settings.drawPoints) {
+        // const adjacentKeyPoints = posenet.getAdjacentKeyPoints(pose.keypoints, 0.2);
+        // adjacentKeyPoints.forEach(kps => {
+        //     ctx.beginPath();
+        //     ctx.moveTo(kps[0].position.x * coef, kps[0].position.y * coef);
+        //     ctx.lineTo(kps[1].position.x * coef, kps[1].position.y * coef);
+        //     ctx.lineWidth = 5;
+        //     ctx.strokeStyle = '#66CCFF';
+        //     ctx.stroke();
+        // })
+
+        pose.keypoints.forEach(kp => {
+            if (kp.score > threshold) {
                 ctx.beginPath();
-                ctx.arc(point.position.x * coef, point.position.y * coef, radius, 0, 2 * Math.PI, false);
+                ctx.arc(kp.position.x * coef, kp.position.y * coef, radius, 0, 2 * Math.PI, false);
                 ctx.fillStyle = '#66CCFF';
                 ctx.fill();
                 ctx.lineWidth = 5;
@@ -134,7 +144,7 @@ function drawPoints(pose, ctx, threshold = 0.5) {
                 ctx.stroke();
             }
         });
-
+    }
 }
 
 async function performDetections(model, camera, [ctx, imgHeight, imgWidth]) {
