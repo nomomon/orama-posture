@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, systemPreferences } = require('electron');
 const path = require('path');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -19,10 +19,12 @@ const createWindow = () => {
     });
 
     // and load the index.html of the app.
+    systemPreferences.askForMediaAccess("camera")
     mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
     // Open the DevTools.
     // mainWindow.webContents.openDevTools();
+
 };
 
 // This method will be called when Electron has finished
