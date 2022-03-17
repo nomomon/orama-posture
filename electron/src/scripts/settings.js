@@ -1,8 +1,8 @@
-if(!localStorage.getItem('settings')){
+if (!localStorage.getItem('settings')) {
     let template = JSON.stringify({
-        voiceAssistant:true,
-        drawPoints:true,
-        programWorking:true,
+        voiceAssistant: true,
+        drawPoints: true,
+        programWorking: true,
     });
     localStorage.setItem('settings', template);
 }
@@ -21,6 +21,7 @@ document.querySelectorAll("input[type=checkbox]").forEach(el => {
     })
 });
 
-function clearData(){
-    localStorage.clear()
+function clearData() {
+    let reply = "delete"; // prompt("Type \"delete\" to confirm")
+    if (reply == "delete") localStorage.clear()
 }
