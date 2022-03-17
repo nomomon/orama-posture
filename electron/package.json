@@ -24,11 +24,19 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "posture_analyzer"
+            "certificateFile": "./cert.pfx",
+            "certificatePassword": "this-is-a-secret",
+            "authors": "nomomon",
+            "iconUrl": "src/images/logo.png",
+            "exe": "postureAnalyzer.exe",
+            "name": "beta"
           }
         },
         {
           "name": "@electron-forge/maker-zip",
+          "config": {
+            "icon": "src/images/logo.png"
+          },
           "platforms": [
             "darwin"
           ]
@@ -56,6 +64,6 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.63",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
     "@electron-forge/maker-zip": "^6.0.0-beta.63",
-    "electron": "17.1.2"
+    "electron": "^17.1.2"
   }
 }
